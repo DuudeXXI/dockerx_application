@@ -1,0 +1,207 @@
+/* Main */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  --button-color-main: rgb(192, 192, 192);
+}
+
+.main-container {
+  width: 800px;
+  height: 100%;
+  background-color: rgb(243, 243, 243);
+  padding: 100px 50px;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  padding: 0px 20%;
+}
+
+.wrapper>h2 {
+  font-size: 48px;
+  padding-bottom: 20px;
+}
+
+.wrapper>p {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  color: rgb(44, 44, 44);
+  padding-bottom: 20px;
+}
+
+.wrapper>p>b {
+  font-size: 46px;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.form-container>.form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  padding: 0px 10%;
+  gap: 5px;
+}
+
+.form-container>.form>.text-field {
+  padding: 10px 20px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgb(160, 160, 160);
+}
+
+.form-container>.form>button {
+  padding: 10px 20px;
+  margin-top: 5px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  background-color: var(--button-color-main);
+}
+
+/* Main End*/
+/* Controllers list */
+
+.controllers-list {
+  width: 100%;
+  margin-top: 60px;
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-flow: column nowrap;
+}
+
+tr:nth-child(even) {
+  background-color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: rgb(255, 251, 237);
+}
+
+.controllers-list>tbody>.controller-line {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+
+}
+
+.controllers-list> tbody >.head {
+  font-weight: 600;
+  background-color: rgb(255, 246, 168);
+}
+
+.controllers-list>tbody>.controller-line>.controller-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+}
+
+.controllers-list>tbody>.controller-line>.controller-cell button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+/* Controllers list End*/
+
+/* Controllers Display */
+
+.page-nav-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.page-nav-container button {
+  cursor: pointer;
+  padding: 8px 16px;
+  background-color: var(--button-color-main);
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+/* Controllers Display End */
+
+.update-container {
+  margin-top: 40px;
+  width: 100%;
+  padding: 0 20%;
+  border: 1px solid grey;
+}
+
+.update-container>.container-column {
+  position: relative;
+  display: flex;
+  padding: 40px 10%;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid grey;
+  flex-flow: column nowrap;
+  gap: 5px;
+}
+
+.update-container>.container-column>.controller-id {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.update-container>.container-column>input {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid rgb(160, 160, 160);
+}
+
+.update-container>.container-column>.status {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.update-container>.container-column>button {
+  width: 100%;
+  padding: 10px 20px;
+  margin-top: 5px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+}
+.update-container>.container-column> .exit-modal{
+  position: absolute;
+  user-select: none;
+  cursor: pointer;
+  line-height: 10px;
+  color: white;
+  font-weight: bold;
+  right: 10px;
+  top: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: rgba(128, 128, 128, 0.4);
+}
