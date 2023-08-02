@@ -15,6 +15,7 @@ const App = () => {
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let controllers_state = 0;
   let tempStorage = controllers;
+  const serverURL = "http://100.101.71.38:3000/";
 
   // Page Controls
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +27,7 @@ const App = () => {
     indexOfFirstController,
     indexOfLastController
   );
+
 
   const validateInput = (value) => {
     const regex = /^\d{0,2}(?:\.\d{0,15})?$/;
@@ -174,7 +176,7 @@ const App = () => {
   const sendPost = () => {
     console.log("hello world");
     axios
-      .post("http://localhost:3000/register", {
+      .post(serverURL + "register", {
         dec_lat,
         dec_lng,
       })
@@ -191,7 +193,7 @@ const App = () => {
     };
 
     axios
-      .put(`http://localhost:3000/${tempController.id}`, tempController)
+      .put(serverURL + tempController.id, tempController)
       .then((res) => {
         console.log("Update request sent successfully:", res.data);
       })
@@ -201,7 +203,7 @@ const App = () => {
 
     if (!controllers_state) {
       axios
-        .get("http://localhost:3000/")
+        .get(serverURL)
         .then((res) => {
           setCount(res.data[0][0].count);
           setControllers(res.data[1].map((controller) => controller));
@@ -220,29 +222,12 @@ const App = () => {
     setControllerUpdate({});
   }
   useEffect(() => {
-    // if (!controllers_state) {
-    //   axios
-    //     .get("http://localhost:3000/")
-    //     .then((res) => {
-    //       setCount(res.data[0][0].count);
-    //       tempStorage = res.data[1].map((controller) => controller);
-    //       console.log(tempStorage);
-    //       setControllers(tempStorage);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    //   console.log(tempStorage);
-    //   controllers_state = 1;
-    // } else {
-    //   return;
-    // }
     getData();
   }, []);
 
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/")
+      const response = await axios.get(serverURL)
       setCount(response.data[0][0].count);
       tempStorage = response.data[1].map((controller) => controller);
       setControllers(tempStorage);
