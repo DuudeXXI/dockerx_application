@@ -13,13 +13,13 @@ app.use(express.static(__dirname + "/public/styles"));
 app.use(express.json());
 app.use(express.static("public"));
 
-const connection = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  database: "tempo_db",
-  password: "Zbjebt262675",
-  multipleStatements: true
-});
+// const connection = mysql.createConnection({
+//   host: "127.0.0.1",
+//   user: "root",
+//   database: "tempo_db",
+//   password: "Zbjebt262675",
+//   multipleStatements: true
+// });
 
 // app.get("/", (req, res) => {
 //   const sql = "SELECT COUNT(*) AS count FROM controllers";

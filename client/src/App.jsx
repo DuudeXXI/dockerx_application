@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
+import Mapsius from "./Components/Mapsius";
 
 const App = () => {
   const [count, setCount] = useState("");
@@ -235,13 +236,14 @@ const App = () => {
       console.error("Error fetching data:", err);
     }
   };
-
+  
   return (
     <div>
       <div className="main-container">
         {renderHero()}
         {renderControllersList()}
         {renderPagination()}
+        <Mapsius></Mapsius>
         {Object.keys(controllerUpdate).length !== 0 ? (
           <div className="update-container">
             <div className="container-column">
@@ -255,16 +257,16 @@ const App = () => {
               />
               {!isValidLatUpdate && (
                 <p style={{ color: "red" }}>Use correct format: 00.000...</p>
-              )}
+                )}
               <input
                 type="text"
                 placeholder="Longitude"
                 value={controllerUpdate.dec_lng}
                 onChange={handleUpdateLng}
-              />
+                />
               {!isValidLngUpdate && (
                 <p style={{ color: "red" }}>Use correct format: 00.000...</p>
-              )}
+                )}
               <div className="status">
                 {controllerUpdate.controler_status ? "Locked" : "Unlocked"}
               </div>
@@ -275,7 +277,7 @@ const App = () => {
           </div>
         ) : (
           ""
-        )}
+          )}
       </div>
     </div>
   );
