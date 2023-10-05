@@ -13,13 +13,13 @@ app.use(express.static(__dirname + "/public/styles"));
 app.use(express.json());
 app.use(express.static("public"));
 
-// const connection = mysql.createConnection({
-//   host: "127.0.0.1",
-//   user: "root",
-//   database: "tempo_db",
-//   password: "Zbjebt262675",
-//   multipleStatements: true
-// });
+const connection = mysql.createConnection({
+  host: "127.0.0.1",
+  user: "root",
+  database: "dockerx_db",
+  password: "DockerX2023",
+  multipleStatements: true
+});
 
 // app.get("/", (req, res) => {
 //   const sql = "SELECT COUNT(*) AS count FROM controllers";
@@ -45,13 +45,14 @@ app.get("/", (req, res) => {
 app.get("/api/", (req, res) => {
 
   const controllerId = req.query.id;
-  const sql = `SELECT * FROM controllers WHERE id = ?;`
+  const sql = `SELECT * FROM controllers WHERE controller_id = ?;`
   const values = [controllerId];
 
   connection.query(sql,values,(err, results) => {
     if (err) throw err;
 
     res.json(results);
+    console.log(results);
 });
 });
 
@@ -77,10 +78,10 @@ app.post("/register", (req, res) => {
 
 app.put('/:id', (req, res) => {
   const { id } = req.params;
-  const { dec_lat, dec_lng, controler_status } = req.body;
+  const { dec_lat, dec_lng, controller_status } = req.body;
 
-  const query = 'UPDATE controllers SET dec_lat = ?, dec_lng = ?, controler_status = ? WHERE id = ?';
-  const values = [dec_lat, dec_lng, controler_status, id];
+  const values = [dec_lat, dec_lng, controller_status, id];
+  const query = 'UPDATE controllers SET dec_lat = ?, dec_lng = ?, controller_status = ? WHERE controller_id = ?';
 
   connection.query(query, values, (err, result) => {
     if (err) {

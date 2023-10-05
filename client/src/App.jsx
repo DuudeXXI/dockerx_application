@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-import Mapsius from "./Components/Mapsius";
 
 const App = () => {
   const [count, setCount] = useState("");
@@ -16,7 +15,6 @@ const App = () => {
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let controllers_state = 0;
   let tempStorage = controllers;
-  const serverURL = "http://100.101.71.38:3000/";
 
   // Page Controls
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +26,6 @@ const App = () => {
     indexOfFirstController,
     indexOfLastController
   );
-
 
   const validateInput = (value) => {
     const regex = /^\d{0,2}(?:\.\d{0,15})?$/;
@@ -127,10 +124,10 @@ const App = () => {
                   +
                 </button>
               </td>
-              <td className="controller-cell">{controller.id}</td>
+              <td className="controller-cell">{controller.controller_id}</td>
               <td className="controller-cell">{controller.dec_lat}</td>
               <td className="controller-cell">{controller.dec_lng}</td>
-              <td className="controller-cell">{controller.controler_status}</td>
+              <td className="controller-cell">{controller.controller_status}</td>
             </tr>
           ))}
         </tbody>
@@ -140,7 +137,7 @@ const App = () => {
   const renderHero = () => {
     return (
       <div className="wrapper">
-        <h2>Tempo</h2>
+        <h2>DockerX</h2>
         <p>
           Take it easy. We will take care of your ride <br />
           Already counting: <br />
@@ -177,7 +174,7 @@ const App = () => {
   const sendPost = () => {
     console.log("hello world");
     axios
-      .post(serverURL + "register", {
+      .post("http://localhost:3000/register", {
         dec_lat,
         dec_lng,
       })
@@ -190,11 +187,11 @@ const App = () => {
     controllers_state = 0;
     const tempController = {
       ...controllerUpdate,
-      controler_status: controllerUpdate.controler_status ? 0 : 1,
+      controller_status: controllerUpdate.controller_status ? 0 : 1,
     };
 
     axios
-      .put(serverURL + tempController.id, tempController)
+      .put(`http://localhost:3000/${tempController.controller_id}`, tempController)
       .then((res) => {
         console.log("Update request sent successfully:", res.data);
       })
@@ -204,7 +201,7 @@ const App = () => {
 
     if (!controllers_state) {
       axios
-        .get(serverURL)
+        .get("http://localhost:3000/")
         .then((res) => {
           setCount(res.data[0][0].count);
           setControllers(res.data[1].map((controller) => controller));
@@ -223,12 +220,29 @@ const App = () => {
     setControllerUpdate({});
   }
   useEffect(() => {
+    // if (!controllers_state) {
+    //   axios
+    //     .get("http://localhost:3000/")
+    //     .then((res) => {
+    //       setCount(res.data[0][0].count);
+    //       tempStorage = res.data[1].map((controller) => controller);
+    //       console.log(tempStorage);
+    //       setControllers(tempStorage);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    //   console.log(tempStorage);
+    //   controllers_state = 1;
+    // } else {
+    //   return;
+    // }
     getData();
   }, []);
 
   const getData = async () => {
     try {
-      const response = await axios.get(serverURL)
+      const response = await axios.get("http://localhost:3000/")
       setCount(response.data[0][0].count);
       tempStorage = response.data[1].map((controller) => controller);
       setControllers(tempStorage);
@@ -236,19 +250,18 @@ const App = () => {
       console.error("Error fetching data:", err);
     }
   };
-  
+
   return (
     <div>
       <div className="main-container">
         {renderHero()}
         {renderControllersList()}
         {renderPagination()}
-        <Mapsius></Mapsius>
         {Object.keys(controllerUpdate).length !== 0 ? (
           <div className="update-container">
             <div className="container-column">
               <div className="exit-modal" onClick={exitUpdateModal}>X</div>
-              <div className="controller-id">{controllerUpdate.id}</div>
+              <div className="controller-id">{controllerUpdate.controller_id}</div>
               <input
                 type="text"
                 placeholder="Latitude"
@@ -257,27 +270,27 @@ const App = () => {
               />
               {!isValidLatUpdate && (
                 <p style={{ color: "red" }}>Use correct format: 00.000...</p>
-                )}
+              )}
               <input
                 type="text"
                 placeholder="Longitude"
                 value={controllerUpdate.dec_lng}
                 onChange={handleUpdateLng}
-                />
+              />
               {!isValidLngUpdate && (
                 <p style={{ color: "red" }}>Use correct format: 00.000...</p>
-                )}
+              )}
               <div className="status">
-                {controllerUpdate.controler_status ? "Locked" : "Unlocked"}
+                {controllerUpdate.controller_status ? "Locked" : "Unlocked"}
               </div>
               <button onClick={sendUpdate}>
-                {controllerUpdate.controler_status ? "Unlock" : "Lock"}
+                {controllerUpdate.controller_status ? "Unlock" : "Lock"}
               </button>
             </div>
           </div>
         ) : (
           ""
-          )}
+        )}
       </div>
     </div>
   );
