@@ -15,6 +15,9 @@ const App = () => {
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let controllers_state = 0;
   let tempStorage = controllers;
+  const client_ip = "http://10.7.7.83";
+  const client_port = ":5000";
+  const server_port = ":3000";
 
   // Page Controls
   const [currentPage, setCurrentPage] = useState(1);
@@ -174,7 +177,7 @@ const App = () => {
   const sendPost = () => {
     console.log("hello world");
     axios
-      .post("http://localhost:3000/register", {
+      .post(client_ip + server_port + "/register", {
         dec_lat,
         dec_lng,
       })
@@ -191,7 +194,7 @@ const App = () => {
     };
 
     axios
-      .put(`http://localhost:3000/${tempController.controller_id}`, tempController)
+      .put(client_ip + server_port + `/${tempController.controller_id}`, tempController)
       .then((res) => {
         console.log("Update request sent successfully:", res.data);
       })
@@ -201,7 +204,7 @@ const App = () => {
 
     if (!controllers_state) {
       axios
-        .get("http://localhost:3000/")
+        .get(client_ip + server_port)
         .then((res) => {
           setCount(res.data[0][0].count);
           setControllers(res.data[1].map((controller) => controller));
@@ -242,7 +245,7 @@ const App = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/")
+      const response = await axios.get(client_ip + server_port)
       setCount(response.data[0][0].count);
       tempStorage = response.data[1].map((controller) => controller);
       setControllers(tempStorage);
