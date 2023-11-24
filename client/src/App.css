@@ -1,19 +1,25 @@
 /* Main */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   --button-color-main: rgb(192, 192, 192);
 }
 
 .main-container {
-  width: 800px;
-  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
   background-color: rgb(243, 243, 243);
-  padding: 100px 50px;
+}
+.row {
+  width: 800px;
+  padding: 100px 0;
 }
 
 .wrapper {
@@ -25,12 +31,12 @@
   padding: 0px 20%;
 }
 
-.wrapper>h2 {
+.wrapper > h2 {
   font-size: 48px;
   padding-bottom: 20px;
 }
 
-.wrapper>p {
+.wrapper > p {
   text-align: center;
   font-size: 20px;
   font-weight: 400;
@@ -38,15 +44,27 @@
   padding-bottom: 20px;
 }
 
-.wrapper>p>b {
+.wrapper > p > b {
   font-size: 46px;
+}
+/* admin_ui_btn btn_list */
+
+.admin_interface {
+}
+.admin_interface > .admin_switch {
+}
+.admin_interface > .btn_list{
+  
+}
+.admin_interface > .btn_list > .admin_btn{
+
 }
 
 .form-container {
   width: 100%;
 }
 
-.form-container>.form {
+.form-container > .form {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -54,14 +72,14 @@
   gap: 5px;
 }
 
-.form-container>.form>.text-field {
+.form-container > .form > .text-field {
   padding: 10px 20px;
   width: 100%;
   border-radius: 12px;
   border: 1px solid rgb(160, 160, 160);
 }
 
-.form-container>.form>button {
+.form-container > .form > button {
   padding: 10px 20px;
   margin-top: 5px;
   width: 100%;
@@ -92,28 +110,27 @@ tr:nth-child(odd) {
   background-color: rgb(255, 251, 237);
 }
 
-.controllers-list>tbody>.controller-line {
+.controllers-list > tbody > .controller-line {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
   padding: 10px 0;
-
 }
 
-.controllers-list> tbody >.head {
+.controllers-list > tbody > .head {
   font-weight: 600;
   background-color: rgb(255, 246, 168);
 }
 
-.controllers-list>tbody>.controller-line>.controller-cell {
+.controllers-list > tbody > .controller-line > .controller-cell {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100px;
 }
 
-.controllers-list>tbody>.controller-line>.controller-cell button {
+.controllers-list > tbody > .controller-line > .controller-cell button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +168,7 @@ tr:nth-child(odd) {
   border: 1px solid grey;
 }
 
-.update-container>.container-column {
+.update-container > .container-column {
   position: relative;
   display: flex;
   padding: 40px 10%;
@@ -162,28 +179,28 @@ tr:nth-child(odd) {
   gap: 5px;
 }
 
-.update-container>.container-column>.controller-id {
+.update-container > .container-column > .controller-id {
   width: 100%;
   display: flex;
   justify-content: center;
   font-size: 26px;
 }
 
-.update-container>.container-column>input {
+.update-container > .container-column > input {
   width: 100%;
   padding: 10px 20px;
   border-radius: 12px;
   border: 1px solid rgb(160, 160, 160);
 }
 
-.update-container>.container-column>.status {
+.update-container > .container-column > .status {
   width: 100%;
   display: flex;
   justify-content: center;
   font-size: 26px;
 }
 
-.update-container>.container-column>button {
+.update-container > .container-column > button {
   width: 100%;
   padding: 10px 20px;
   margin-top: 5px;
@@ -192,7 +209,7 @@ tr:nth-child(odd) {
   border-radius: 12px;
   font-size: 14px;
 }
-.update-container>.container-column> .exit-modal{
+.update-container > .container-column > .exit-modal {
   position: absolute;
   user-select: none;
   cursor: pointer;

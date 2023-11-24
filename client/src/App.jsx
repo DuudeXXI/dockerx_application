@@ -130,7 +130,9 @@ const App = () => {
               <td className="controller-cell">{controller.controller_id}</td>
               <td className="controller-cell">{controller.dec_lat}</td>
               <td className="controller-cell">{controller.dec_lng}</td>
-              <td className="controller-cell">{controller.controller_status}</td>
+              <td className="controller-cell">
+                {controller.controller_status}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -194,7 +196,10 @@ const App = () => {
     };
 
     axios
-      .put(client_ip + server_port + `/${tempController.controller_id}`, tempController)
+      .put(
+        client_ip + server_port + `/${tempController.controller_id}`,
+        tempController
+      )
       .then((res) => {
         console.log("Update request sent successfully:", res.data);
       })
@@ -221,7 +226,7 @@ const App = () => {
   };
   const exitUpdateModal = () => {
     setControllerUpdate({});
-  }
+  };
   useEffect(() => {
     // if (!controllers_state) {
     //   axios
@@ -245,7 +250,7 @@ const App = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(client_ip + server_port)
+      const response = await axios.get(client_ip + server_port);
       setCount(response.data[0][0].count);
       tempStorage = response.data[1].map((controller) => controller);
       setControllers(tempStorage);
@@ -255,16 +260,20 @@ const App = () => {
   };
 
   return (
-    <div>
-      <div className="main-container">
+    <div className="main-container">
+      <div className="row">
         {renderHero()}
         {renderControllersList()}
         {renderPagination()}
         {Object.keys(controllerUpdate).length !== 0 ? (
           <div className="update-container">
             <div className="container-column">
-              <div className="exit-modal" onClick={exitUpdateModal}>X</div>
-              <div className="controller-id">{controllerUpdate.controller_id}</div>
+              <div className="exit-modal" onClick={exitUpdateModal}>
+                X
+              </div>
+              <div className="controller-id">
+                {controllerUpdate.controller_id}
+              </div>
               <input
                 type="text"
                 placeholder="Latitude"
@@ -294,6 +303,14 @@ const App = () => {
         ) : (
           ""
         )}
+        <div className="admin_interface">
+          <div className="admin_switch "> I/O mygtukas</div>
+          <div className="admin_btn_list">
+            <div className="admin_btn">Create database</div>
+            <div className="admin_btn">Insert controller</div>
+            <div className="admin_btn">Delete selected controller</div>
+          </div>
+        </div>
       </div>
     </div>
   );
