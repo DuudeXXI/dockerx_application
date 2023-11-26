@@ -15,7 +15,7 @@ const App = () => {
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let controllers_state = 0;
   let tempStorage = controllers;
-  const client_ip = "http://10.7.7.83";
+  const client_ip = "http://172.20.10.12";
   const client_port = ":5000";
   const server_port = ":3000";
 

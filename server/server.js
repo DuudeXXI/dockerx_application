@@ -47,12 +47,10 @@ app.get("/api/", (req, res) => {
   const controllerId = req.query.id;
   const sql = `SELECT * FROM controllers WHERE controller_id = ?;`
   const values = [controllerId];
-
   connection.query(sql,values,(err, results) => {
     if (err) throw err;
 
     res.json(results);
-    console.log(results);
 });
 });
 
