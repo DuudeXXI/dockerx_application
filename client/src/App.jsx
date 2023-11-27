@@ -113,7 +113,9 @@ const App = () => {
             <td className="controller-cell">ID</td>
             <td className="controller-cell">dec_latitude</td>
             <td className="controller-cell">del_longitude</td>
-            <td className="controller-cell">status</td>
+            <td className="controller-cell">ctrl_status</td>
+            <td className="controller-cell">lock_status</td>
+            <td className="controller-cell">alarm_status</td>
           </tr>
           {currentControllers?.map((controller) => (
             <tr className="controller-line" key={controller.id}>
@@ -132,6 +134,12 @@ const App = () => {
               <td className="controller-cell">{controller.dec_lng}</td>
               <td className="controller-cell">
                 {controller.controller_status}
+              </td>
+              <td className="controller-cell">
+                {controller.lock_status}
+              </td>
+              <td className="controller-cell">
+                {controller.alarm_status}
               </td>
             </tr>
           ))}
@@ -298,6 +306,8 @@ const App = () => {
               <button onClick={sendUpdate}>
                 {controllerUpdate.controller_status ? "Unlock" : "Lock"}
               </button>
+              <div>Lock status: <b>controllerUpdate.lock_status</b></div>
+              <div>Alarm status: <b>controllerUpdate.alarm_status</b></div>
             </div>
           </div>
         ) : (
