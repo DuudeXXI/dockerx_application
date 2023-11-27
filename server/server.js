@@ -20,17 +20,29 @@ const connection = mysql.createConnection({
   password: "DockerX2023",
   multipleStatements: true
 });
+// not yet working
+app.post('/statusData', (req, res) => {
+  const controllerId = req.query.id; // Extract controller ID from the query parameters
+  const newLockStatus = req.body.lock_status;
+  const newAlarmStatus = req.body.alarm_status;
 
-// app.get("/", (req, res) => {
-//   const sql = "SELECT COUNT(*) AS count FROM controllers";
-//   connection.query(sql, (err, results) => {
-//     if (err) throw err;
+  updateDatabase(controllerId, newLockStatus, newAlarmStatus, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // Broadcast the updated status to connected WebSocket clients
+      io.emit('lockStatusUpdate', { id: controllerId, lock_status: newLockStatus, alarm_status: newAlarmStatus });
 
-//     const count = results[0].count;
-//     // res.sendFile(__dirname + "/index.html");
-//     res.json(count);
-//   });
-// });
+      console.log(`Lock status updated to: ${newLockStatus} for controller ID: ${controllerId}`);
+      console.log(`Alarm status updated to: ${newAlarmStatus} for controller ID: ${controllerId}`);
+  
+      res.sendStatus(200);
+    }
+  });
+});
+
+
 app.get("/", (req, res) => {
   let sql = `SELECT COUNT(*) AS count FROM controllers;
              SELECT * FROM controllers AS data_test;`
@@ -95,3 +107,27 @@ app.put('/:id', (req, res) => {
 app.listen(port, () => {
   console.log("API Service running...");
 });
+
+//FUNCTIONS
+function updateDatabase(controllerId, newLockStatus, newAlarmStatus, callback) {
+  // Use the connection pool to execute a query to update the database
+  pool.getConnection((err, connection) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    const updateQuery = 'UPDATE your_table SET lock_status = ?, alarm_status = ? WHERE id = ?';
+    const updateValues = [newLockStatus, newAlarmStatus, controllerId];
+
+    connection.query(updateQuery, updateValues, (updateErr, results) => {
+      connection.release(); // Release the connection back to the pool
+
+      if (updateErr) {
+        callback(updateErr);
+      } else {
+        callback(null);
+      }
+    });
+  });
+}

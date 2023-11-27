@@ -18,11 +18,13 @@
   background-color: rgb(243, 243, 243);
 }
 .row {
+  border: 1px solid grey;
   width: 800px;
   padding: 100px 0;
 }
 
 .wrapper {
+  border: 1px solid grey;
   display: flex;
   width: 100%;
   align-items: center;

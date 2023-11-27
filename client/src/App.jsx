@@ -106,7 +106,8 @@ const App = () => {
 
   const renderControllersList = () => {
     return (
-      <table className="controllers-list">
+      <div className="wrapper">
+        <table className="controllers-list">
         <tbody>
           <tr className="controller-line head">
             <td className="controller-cell">Update</td>
@@ -145,6 +146,7 @@ const App = () => {
           ))}
         </tbody>
       </table>
+      </div>
     );
   };
   const renderHero = () => {
