@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const mysql = require("mysql2");
 const cors = require("cors");
+const socketIo = require('socket.io');
 const { v4: uuid } = require("uuid");
 const bodyParser = require("body-parser");
 
@@ -13,57 +14,63 @@ app.use(express.static(__dirname + "/public/styles"));
 app.use(express.json());
 app.use(express.static("public"));
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 5,
   host: "127.0.0.1",
   user: "root",
   database: "dockerx_db",
   password: "DockerX2023",
-  multipleStatements: true
+  multipleStatements: true,
 });
-// not yet working
-app.post('/statusData', (req, res) => {
-  const controllerId = req.query.id; // Extract controller ID from the query parameters
-  const newLockStatus = req.body.lock_status;
-  const newAlarmStatus = req.body.alarm_status;
 
-  updateDatabase(controllerId, newLockStatus, newAlarmStatus, (err) => {
+app.get("/", (req, res) => {
+  const sql = `SELECT COUNT(*) AS count FROM controllers;
+               SELECT * FROM controllers AS data_test;`;
+
+  pool.getConnection((err, connection) => {
     if (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      // Broadcast the updated status to connected WebSocket clients
-      io.emit('lockStatusUpdate', { id: controllerId, lock_status: newLockStatus, alarm_status: newAlarmStatus });
-
-      console.log(`Lock status updated to: ${newLockStatus} for controller ID: ${controllerId}`);
-      console.log(`Alarm status updated to: ${newAlarmStatus} for controller ID: ${controllerId}`);
-  
-      res.sendStatus(200);
+      console.error("Error getting MySQL connection from pool:", err);
+      res.status(500).send("Internal Server Error");
+      return;
     }
+
+    connection.query(sql, (queryErr, results) => {
+      connection.release();
+
+      if (queryErr) {
+        console.error("Error executing query:", queryErr);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.json(results);
+    });
   });
 });
 
-
-app.get("/", (req, res) => {
-  let sql = `SELECT COUNT(*) AS count FROM controllers;
-             SELECT * FROM controllers AS data_test;`
-  connection.query(sql, (err, results) => {
-    if (err) throw err;
-
-    const count = results;
-    res.json(count);
-});
-});
-
 app.get("/api/", (req, res) => {
-
   const controllerId = req.query.id;
-  const sql = `SELECT * FROM controllers WHERE controller_id = ?;`
+  const sql = "SELECT * FROM controllers WHERE controller_id = ?";
   const values = [controllerId];
-  connection.query(sql,values,(err, results) => {
-    if (err) throw err;
 
-    res.json(results);
-});
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Error getting MySQL connection from pool:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    connection.query(sql, values, (queryErr, results) => {
+      connection.release();
+
+      if (queryErr) {
+        console.error("Error executing query:", queryErr);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.json(results);
+    });
+  });
 });
 
 app.post("/register", (req, res) => {
@@ -72,35 +79,94 @@ app.post("/register", (req, res) => {
     dec_lat: req.body.dec_lat,
     dec_lng: req.body.dec_lng,
   };
-  console.log(controller.dec_lat.length);
-  if (!isNaN(controller.dec_lat) &&
-      !isNaN(controller.dec_lng) &&
-      controller.dec_lat.length > 1 &&
-      controller.dec_lng.length > 1) {
-    connection.query(sql, controller, (err, results) => {
-      if (err) throw err
-      console.log("Sent successfully");
+
+  if (
+    !isNaN(controller.dec_lat) &&
+    !isNaN(controller.dec_lng) &&
+    controller.dec_lat.toString().length > 1 &&
+    controller.dec_lng.toString().length > 1
+  ) {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.error("Error getting MySQL connection from pool:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      connection.query(sql, controller, (queryErr, results) => {
+        connection.release(); // Release the connection back to the pool
+
+        if (queryErr) {
+          console.error("Error executing query:", queryErr);
+          res.status(500).send("Internal Server Error");
+          return;
+        }
+
+        console.log("Sent successfully");
+        res.sendStatus(200);
+      });
     });
   } else {
     console.log("kazkas negerai");
+    res.status(400).send("Bad Request");
   }
 });
 
-app.put('/:id', (req, res) => {
+app.put("/:id", (req, res) => {
   const { id } = req.params;
   const { dec_lat, dec_lng, controller_status } = req.body;
 
   const values = [dec_lat, dec_lng, controller_status, id];
-  const query = 'UPDATE controllers SET dec_lat = ?, dec_lng = ?, controller_status = ? WHERE controller_id = ?';
+  const query =
+    "UPDATE controllers SET dec_lat = ?, dec_lng = ?, controller_status = ? WHERE controller_id = ?";
 
-  connection.query(query, values, (err, result) => {
+  pool.getConnection((err, connection) => {
     if (err) {
-      console.error('Error updating data:', err);
-      res.status(500).json({ error: 'Error updating data' });
-    } else {
-      console.log('Data updated successfully');
-      res.json({ message: 'Data updated successfully' });
+      console.error("Error getting MySQL connection from pool:", err);
+      res.status(500).send("Internal Server Error");
+      return;
     }
+
+    connection.query(query, values, (queryErr, result) => {
+      connection.release(); // Release the connection back to the pool
+
+      if (queryErr) {
+        console.error("Error updating data:", queryErr);
+        res.status(500).json({ error: "Error updating data" });
+      } else {
+        console.log("Data updated successfully");
+        res.json({ message: "Data updated successfully" });
+      }
+    });
+  });
+});
+
+app.post("/statusdata", (req, res) => {
+  const { lockStatus, alarmStatus, controllerId } = req.body;
+  // Use the connection pool
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Error getting MySQL connection from pool:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    // Update the database based on the received data
+    const values = [lockStatus, alarmStatus, controllerId];
+    const sql =
+      "UPDATE controllers SET lock_status = ?, alarm_status = ? WHERE controller_id = ?";
+
+    connection.query(sql, values, (queryErr, results) => {
+      connection.release(); // Release the connection back to the pool
+
+      if (queryErr) {
+        console.error("Error updating database:", queryErr);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.sendStatus(200); // Send a success response
+    });
   });
 });
 
@@ -110,18 +176,18 @@ app.listen(port, () => {
 
 //FUNCTIONS
 function updateDatabase(controllerId, newLockStatus, newAlarmStatus, callback) {
-  // Use the connection pool to execute a query to update the database
   pool.getConnection((err, connection) => {
     if (err) {
       callback(err);
       return;
     }
 
-    const updateQuery = 'UPDATE your_table SET lock_status = ?, alarm_status = ? WHERE id = ?';
+    const updateQuery =
+      "UPDATE controllers SET lock_status = ?, alarm_status = ? WHERE id = ?";
     const updateValues = [newLockStatus, newAlarmStatus, controllerId];
 
     connection.query(updateQuery, updateValues, (updateErr, results) => {
-      connection.release(); // Release the connection back to the pool
+      connection.release();
 
       if (updateErr) {
         callback(updateErr);

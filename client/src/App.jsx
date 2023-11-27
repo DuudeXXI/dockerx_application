@@ -15,7 +15,7 @@ const App = () => {
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let controllers_state = 0;
   let tempStorage = controllers;
-  const client_ip = "http://172.20.10.12";
+  const client_ip = "http://172.20.10.10";
   const client_port = ":5000";
   const server_port = ":3000";
 
@@ -106,46 +106,42 @@ const App = () => {
 
   const renderControllersList = () => {
     return (
-      <div className="wrapper">
+      <div className="row">
         <table className="controllers-list">
-        <tbody>
-          <tr className="controller-line head">
-            <td className="controller-cell">Update</td>
-            <td className="controller-cell">ID</td>
-            <td className="controller-cell">dec_latitude</td>
-            <td className="controller-cell">del_longitude</td>
-            <td className="controller-cell">ctrl_status</td>
-            <td className="controller-cell">lock_status</td>
-            <td className="controller-cell">alarm_status</td>
-          </tr>
-          {currentControllers?.map((controller) => (
-            <tr className="controller-line" key={controller.id}>
-              <td className="controller-cell">
-                <button
-                  controller={controller}
-                  onClick={(e) => {
-                    setControllerUpdate(controller);
-                  }}
-                >
-                  +
-                </button>
-              </td>
-              <td className="controller-cell">{controller.controller_id}</td>
-              <td className="controller-cell">{controller.dec_lat}</td>
-              <td className="controller-cell">{controller.dec_lng}</td>
-              <td className="controller-cell">
-                {controller.controller_status}
-              </td>
-              <td className="controller-cell">
-                {controller.lock_status}
-              </td>
-              <td className="controller-cell">
-                {controller.alarm_status}
-              </td>
+          <tbody>
+            <tr className="controller-line head">
+              <td className="controller-cell">Update</td>
+              <td className="controller-cell">ID</td>
+              <td className="controller-cell">dec_latitude</td>
+              <td className="controller-cell">del_longitude</td>
+              <td className="controller-cell">ctrl_status</td>
+              <td className="controller-cell">lock_status</td>
+              <td className="controller-cell">alarm_status</td>
             </tr>
-          ))}
-        </tbody>
-      </table>
+            {currentControllers?.map((controller) => (
+              <tr className="controller-line" key={controller.id}>
+                <td className="controller-cell">
+                  <button
+                    controller={controller}
+                    onClick={(e) => {
+                      setControllerUpdate(controller);
+                    }}
+                  >
+                    +
+                  </button>
+                </td>
+                <td className="controller-cell">{controller.controller_id}</td>
+                <td className="controller-cell">{controller.dec_lat}</td>
+                <td className="controller-cell">{controller.dec_lng}</td>
+                <td className="controller-cell">
+                  {controller.controller_status}
+                </td>
+                <td className="controller-cell">{controller.lock_status}</td>
+                <td className="controller-cell">{controller.alarm_status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   };
@@ -308,19 +304,25 @@ const App = () => {
               <button onClick={sendUpdate}>
                 {controllerUpdate.controller_status ? "Unlock" : "Lock"}
               </button>
-              <div>Lock status: <b>controllerUpdate.lock_status</b></div>
-              <div>Alarm status: <b>controllerUpdate.alarm_status</b></div>
+              <div>
+                Lock status: <b>controllerUpdate.lock_status</b>
+              </div>
+              <div>
+                Alarm status: <b>controllerUpdate.alarm_status</b>
+              </div>
             </div>
           </div>
         ) : (
           ""
         )}
-        <div className="admin_interface">
-          <div className="admin_switch "> I/O mygtukas</div>
-          <div className="admin_btn_list">
-            <div className="admin_btn">Create database</div>
-            <div className="admin_btn">Insert controller</div>
-            <div className="admin_btn">Delete selected controller</div>
+        <div className="row">
+          <div className="admin_interface">
+            <div className="admin_switch "> I/O mygtukas</div>
+            <div className="admin_btn_list">
+              <div className="admin_btn">Create database</div>
+              <div className="admin_btn">Insert controller</div>
+              <div className="admin_btn">Delete selected controller</div>
+            </div>
           </div>
         </div>
       </div>
