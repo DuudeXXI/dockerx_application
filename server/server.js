@@ -1,27 +1,25 @@
 const express = require("express");
-const app = express();
-const port = 3000;
-const mysql = require("mysql2");
 const cors = require("cors");
-const socketIo = require('socket.io');
-const { v4: uuid } = require("uuid");
+// const { v4: uuid } = require("uuid");
 const bodyParser = require("body-parser");
+const socketIo = require('socket.io');
+const port = 3000;
+
+const app = express();
+const server = require('http').createServer(app);
+const io = socketIo(server, {
+  methods:['GET', 'POST', 'PUT', 'DELETE']
+}); 
 
 app.use(cors());
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extend: true }));
+app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public/styles"));
 app.use(express.json());
 app.use(express.static("public"));
 
-const pool = mysql.createPool({
-  connectionLimit: 5,
-  host: "127.0.0.1",
-  user: "root",
-  database: "dockerx_db",
-  password: "DockerX2023",
-  multipleStatements: true,
-});
+const pool = require('./database/pool');
 
 app.get("/", (req, res) => {
   const sql = `SELECT COUNT(*) AS count FROM controllers;
@@ -94,7 +92,7 @@ app.post("/register", (req, res) => {
       }
 
       connection.query(sql, controller, (queryErr, results) => {
-        connection.release(); // Release the connection back to the pool
+        connection.release(); 
 
         if (queryErr) {
           console.error("Error executing query:", queryErr);
@@ -128,7 +126,7 @@ app.put("/:id", (req, res) => {
     }
 
     connection.query(query, values, (queryErr, result) => {
-      connection.release(); // Release the connection back to the pool
+      connection.release(); 
 
       if (queryErr) {
         console.error("Error updating data:", queryErr);
@@ -143,7 +141,7 @@ app.put("/:id", (req, res) => {
 
 app.post("/statusdata", (req, res) => {
   const { lockStatus, alarmStatus, controllerId } = req.body;
-  // Use the connection pool
+
   pool.getConnection((err, connection) => {
     if (err) {
       console.error("Error getting MySQL connection from pool:", err);
@@ -151,13 +149,12 @@ app.post("/statusdata", (req, res) => {
       return;
     }
 
-    // Update the database based on the received data
     const values = [lockStatus, alarmStatus, controllerId];
     const sql =
       "UPDATE controllers SET lock_status = ?, alarm_status = ? WHERE controller_id = ?";
 
     connection.query(sql, values, (queryErr, results) => {
-      connection.release(); // Release the connection back to the pool
+      connection.release();
 
       if (queryErr) {
         console.error("Error updating database:", queryErr);
@@ -165,7 +162,7 @@ app.post("/statusdata", (req, res) => {
         return;
       }
 
-      res.sendStatus(200); // Send a success response
+      res.sendStatus(200);
     });
   });
 });
@@ -175,25 +172,4 @@ app.listen(port, () => {
 });
 
 //FUNCTIONS
-function updateDatabase(controllerId, newLockStatus, newAlarmStatus, callback) {
-  pool.getConnection((err, connection) => {
-    if (err) {
-      callback(err);
-      return;
-    }
 
-    const updateQuery =
-      "UPDATE controllers SET lock_status = ?, alarm_status = ? WHERE id = ?";
-    const updateValues = [newLockStatus, newAlarmStatus, controllerId];
-
-    connection.query(updateQuery, updateValues, (updateErr, results) => {
-      connection.release();
-
-      if (updateErr) {
-        callback(updateErr);
-      } else {
-        callback(null);
-      }
-    });
-  });
-}
