@@ -1,14 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 // const { v4: uuid } = require("uuid");
+const app = express();
 const bodyParser = require("body-parser");
-const socketIo = require('socket.io');
 const port = 3000;
 
-const app = express();
+const socketIo = require('socket.io');
 const server = require('http').createServer(app);
 const io = socketIo(server, {
-  methods:['GET', 'POST', 'PUT', 'DELETE']
+  cors: {
+    origin: '*',
+    methods:['GET', 'POST', 'PUT', 'DELETE']
+  }
 }); 
 
 app.use(cors());
@@ -19,8 +22,23 @@ app.use(express.static(__dirname + "/public/styles"));
 app.use(express.json());
 app.use(express.static("public"));
 
+
+
 const pool = require('./database/pool');
 
+io.on('connection', (socket) => {
+  console.log(`A user connected: ${socket.id} `);
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log(`A user disconnected: ${socket.id} `);
+  });
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+});
+
+// console.log(err.code);  we will need to use it
 app.get("/", (req, res) => {
   const sql = `SELECT COUNT(*) AS count FROM controllers;
                SELECT * FROM controllers AS data_test;`;
@@ -162,14 +180,19 @@ app.post("/statusdata", (req, res) => {
         return;
       }
 
+      io.emit('statusUpdate', { lockStatus, alarmStatus, controllerId });
+
       res.sendStatus(200);
     });
   });
 });
 
-app.listen(port, () => {
-  console.log("API Service running...");
+server.listen(port, () => {
+  console.log("Socket.io and API services working...");
 });
+// app.listen(port, () => {
+//   console.log("API Service running...");
+// });
 
 //FUNCTIONS
 

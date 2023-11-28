@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-const App = () => {
+import io from "socket.io-client";
 
+const App = () => {
   const [count, setCount] = useState("");
   const [dec_lat, setDec_lat] = useState("");
   const [dec_lng, setDec_lng] = useState("");
   const [isValidLat, setIsValidLat] = useState(true);
   const [isValidLng, setIsValidLng] = useState(true);
   const [controllers, setControllers] = useState([]);
+  const [socketData, setSocketData] = useState({lockStatus: "?"});
 
   // controllers update modal states
   const [controllerUpdate, setControllerUpdate] = useState({});
@@ -16,7 +18,7 @@ const App = () => {
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let controllers_state = 0;
   let tempStorage = controllers;
-  const client_ip = "http://172.20.10.10";
+  const ip = "http://172.20.10.10";
   const client_port = ":5000";
   const server_port = ":3000";
 
@@ -30,7 +32,20 @@ const App = () => {
     indexOfFirstController,
     indexOfLastController
   );
+  useEffect(() => {
+    const socket = io.connect("http://172.20.10.10:3000");
+    socket.on("statusUpdate", (data) => {
+      console.log("Received real-time update:", data);
+      setSocketData(data);
+    });
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    });
 
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
   const validateInput = (value) => {
     const regex = /^\d{0,2}(?:\.\d{0,15})?$/;
     return regex.test(value);
@@ -153,7 +168,7 @@ const App = () => {
         <p>
           Take it easy. We will take care of your ride <br />
           Already counting: <br />
-          <b>{count.toString().length <= 0 ? "Nėra" : count}</b>
+          <b>{count.toString().length <= 0 ? "Nėra" : socketData.lockStatus}</b>
           <br /> Stations!
         </p>
         <div className="form-container">
@@ -186,7 +201,7 @@ const App = () => {
   const sendPost = () => {
     console.log("hello world");
     axios
-      .post(client_ip + server_port + "/register", {
+      .post(ip + server_port + "/register", {
         dec_lat,
         dec_lng,
       })
@@ -204,7 +219,7 @@ const App = () => {
 
     axios
       .put(
-        client_ip + server_port + `/${tempController.controller_id}`,
+        ip + server_port + `/${tempController.controller_id}`,
         tempController
       )
       .then((res) => {
@@ -216,7 +231,7 @@ const App = () => {
 
     if (!controllers_state) {
       axios
-        .get(client_ip + server_port)
+        .get(ip + server_port)
         .then((res) => {
           setCount(res.data[0][0].count);
           setControllers(res.data[1].map((controller) => controller));
@@ -235,29 +250,12 @@ const App = () => {
     setControllerUpdate({});
   };
   useEffect(() => {
-    // if (!controllers_state) {
-    //   axios
-    //     .get("http://localhost:3000/")
-    //     .then((res) => {
-    //       setCount(res.data[0][0].count);
-    //       tempStorage = res.data[1].map((controller) => controller);
-    //       console.log(tempStorage);
-    //       setControllers(tempStorage);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    //   console.log(tempStorage);
-    //   controllers_state = 1;
-    // } else {
-    //   return;
-    // }
     getData();
   }, []);
 
   const getData = async () => {
     try {
-      const response = await axios.get(client_ip + server_port);
+      const response = await axios.get(ip + server_port);
       setCount(response.data[0][0].count);
       tempStorage = response.data[1].map((controller) => controller);
       setControllers(tempStorage);
