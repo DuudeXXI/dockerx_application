@@ -5,14 +5,14 @@ const app = express();
 const bodyParser = require("body-parser");
 const port = 3000;
 
-const socketIo = require('socket.io');
-const server = require('http').createServer(app);
+const socketIo = require("socket.io");
+const server = require("http").createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: '*',
-    methods:['GET', 'POST', 'PUT', 'DELETE']
-  }
-}); 
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
 
 app.use(cors());
 app.set("view engine", "ejs");
@@ -22,15 +22,13 @@ app.use(express.static(__dirname + "/public/styles"));
 app.use(express.json());
 app.use(express.static("public"));
 
+const pool = require("./database/pool");
 
-
-const pool = require('./database/pool');
-
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
   console.log(`A user connected: ${socket.id} `);
 
   // Handle disconnection
-  socket.on('disconnect', () => {
+  socket.on("disconnect", () => {
     console.log(`A user disconnected: ${socket.id} `);
   });
   socket.on("connect_error", (err) => {
@@ -110,7 +108,7 @@ app.post("/register", (req, res) => {
       }
 
       connection.query(sql, controller, (queryErr, results) => {
-        connection.release(); 
+        connection.release();
 
         if (queryErr) {
           console.error("Error executing query:", queryErr);
@@ -131,11 +129,18 @@ app.post("/register", (req, res) => {
 app.put("/:id", (req, res) => {
   const { id } = req.params;
   const { dec_lat, dec_lng, controller_status } = req.body;
-
-  const values = [dec_lat, dec_lng, controller_status, id];
-  const query =
-    "UPDATE controllers SET dec_lat = ?, dec_lng = ?, controller_status = ? WHERE controller_id = ?";
-
+  let values;
+  let query;
+  
+  if (dec_lat == null || dec_lng == null) {
+    values = [controller_status, id];
+    query =
+      "UPDATE controllers SET controller_status = ? WHERE controller_id = ?";
+  } else {
+    values = [dec_lat, dec_lng, controller_status, id];
+    query =
+      "UPDATE controllers SET dec_lat = ?, dec_lng = ?, controller_status = ? WHERE controller_id = ?";
+  }
   pool.getConnection((err, connection) => {
     if (err) {
       console.error("Error getting MySQL connection from pool:", err);
@@ -144,7 +149,7 @@ app.put("/:id", (req, res) => {
     }
 
     connection.query(query, values, (queryErr, result) => {
-      connection.release(); 
+      connection.release();
 
       if (queryErr) {
         console.error("Error updating data:", queryErr);
@@ -180,7 +185,7 @@ app.post("/statusdata", (req, res) => {
         return;
       }
 
-      io.emit('statusUpdate', { lockStatus, alarmStatus, controllerId });
+      io.emit("statusUpdate", { lockStatus, alarmStatus, controllerId });
 
       res.sendStatus(200);
     });
@@ -195,4 +200,3 @@ server.listen(port, () => {
 // });
 
 //FUNCTIONS
-

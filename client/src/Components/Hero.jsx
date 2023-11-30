@@ -14,7 +14,9 @@ const Hero = () => {
     isValidLng,
     setIsValidLng,
     ip,
-    server_port
+    validateInput,
+    server_port,
+    setRefresh
   } = useContext(MainContext);
 
   // FUNCTIONS
@@ -34,12 +36,7 @@ const Hero = () => {
       setDec_lng(value);
     }
   };
-  const validateInput = (value) => {
-    const regex = /^\d{0,2}(?:\.\d{0,15})?$/;
-    return regex.test(value);
-  };
   const sendPost = () => {
-    console.log("hello world");
     axios
       .post(ip + server_port + "/register", {
         dec_lat,
@@ -47,6 +44,7 @@ const Hero = () => {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
+      setRefresh(true);
   };
 
   return (
