@@ -1,0 +1,23 @@
+.intro-container {
+  background-color: var(--primary-color);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  .intro-image {
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .intro-title {
+    position: relative;
+    font-size: 42px;
+    sup {
+      position: absolute;
+      top: -4px;
+      right: -18px;
+    }
+  }
+}

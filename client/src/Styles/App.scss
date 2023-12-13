@@ -1,0 +1,16 @@
+@import "./Global.css";
+* {
+  font-family: var(--primary-font);
+  font-weight: 800;
+  color: azure;
+}
+#root {
+  width: 100%;
+}
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
