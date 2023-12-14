@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialStateValue = {latitude: 54.69178014376323,  longitude: 25.27599512080431};
+const initialStateValue = {lat: 54.69178014444323,  lng: 25.2759951244431};
 
 export const currentLocationSlice = createSlice({
   name: "currentLocation",
