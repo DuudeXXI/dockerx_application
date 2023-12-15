@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../Styles/MainMap.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { intervalId } from "../Functions/refreshInterval";
 
 import { useSelector, useDispatch } from "react-redux";
 import { updateLocation } from "../Reducers/MainMap";
@@ -9,59 +10,43 @@ const MainMap = () => {
   const currentLocation = useSelector((state) => state.currentLocation.value);
   const dispatch = useDispatch();
 
-  const [center, setCenter] = useState(currentLocation);
-  const [centerIsUpdated, setCenterIsUpdated] = useState(false);
-  const [positionMarker, setPositionMarker] = useState(currentLocation);
+  const [userLoc, setUserLoc] = useState(currentLocation);
+  const [positionMarker, setPositionMarker] = useState(null);
 
   const containerStyle = {
     width: "100%",
     height: "100%",
   };
 
+  function getUserLocation() {
+    const success = (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      localStorage.setItem(
+        "userLocation",
+        JSON.stringify({ lat: latitude, lng: longitude })
+      );
+      console.log("Location stored");
+      return true;
+    };
+    const error = () => {
+      console.log("Unable to retrieve location");
+      localStorage.removeItem("userLocation");
+      return false;
+    };
+    if (!navigator.geolocation) {
+      console.log("Geolocation is not supported by your browser");
+    } else if (!localStorage.getItem("userLocation")) {
+      console.log("Locating…");
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+  }
+
   useEffect(() => {
-    locationUpdate();
-    const intervalId = setInterval(markerUpdate, 5000);
-    return () => clearInterval(intervalId);
+    // getUserLocation();
+    intervalId(getUserLocation);
   }, []);
   // GET LOCATION
-  const locationUpdate = () => {
-    if (localStorage.getItem("position") == null) {
-      navigator.geolocation.getCurrentPosition(
-        (position) =>
-          localStorage.setItem(
-            "position",
-            JSON.stringify({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            })
-          ),
-        null
-      );
-      setCenter(JSON.parse(localStorage.getItem("position")));
-      dispatch(updateLocation(JSON.parse(localStorage.getItem("position"))));
-    } else {
-      dispatch(updateLocation(JSON.parse(localStorage.getItem("position"))));
-      setCenter(JSON.parse(localStorage.getItem("position")));
-    }
-    // regex code that will set global location state
-    //   const positionas = JSON.parse(localStorage.getItem("position"));
-    //   console.log(`positionas: ${positionas.latitude}`);
-  };
-  const markerUpdate = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) =>
-        setPositionMarker({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        }),
-      null
-    );
-  };
-
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "Development project",
-  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-  // });
 
   const options = {
     disableDefaultUI: true, // Disable default UI controls
@@ -103,7 +88,7 @@ const MainMap = () => {
         elementType: "geometry.stroke",
         stylers: [
           {
-            visibility:"off",
+            visibility: "off",
           },
         ],
       },
@@ -112,16 +97,16 @@ const MainMap = () => {
         elementType: "labels",
         stylers: [
           {
-            visibility:"off",
+            visibility: "off",
           },
         ],
       },
       {
-        featureType: 'water',
-        elementType: 'labels.text',
+        featureType: "water",
+        elementType: "labels.text",
         stylers: [
           {
-            visibility: 'off',
+            visibility: "off",
           },
         ],
       },
@@ -130,7 +115,7 @@ const MainMap = () => {
         elementType: "all",
         stylers: [
           {
-            visibility:"off",
+            visibility: "off",
           },
         ],
       },
@@ -161,13 +146,10 @@ const MainMap = () => {
       <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerStyle={containerStyle}
-          center={center}
+          center={userLoc}
           zoom={15}
           options={options}
-        >
-          {/* Child components, such as markers, info windows, etc. */}
-          <Marker position={{ lat: 54.70072567997, lng: 25.29795280249 }} />
-        </GoogleMap>
+        ></GoogleMap>
       </LoadScript>
     </div>
   );
