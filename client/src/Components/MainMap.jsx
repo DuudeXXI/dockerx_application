@@ -10,8 +10,10 @@ const MainMap = () => {
   const currentLocation = useSelector((state) => state.currentLocation.value);
   const dispatch = useDispatch();
 
-  const [userLoc, setUserLoc] = useState(currentLocation);
+  const [userLoc, setUserLoc] = useState(null);
   const [positionMarker, setPositionMarker] = useState(null);
+
+const random = {lat:54.70095243213106,lng:25.29821096642473}
 
   const containerStyle = {
     width: "100%",
@@ -42,11 +44,48 @@ const MainMap = () => {
     }
   }
 
+  function watchUserLocation() {
+    const options = {
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 10000,
+    };
+    const successCallback = (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      localStorage.setItem(
+        "userLocation",
+        JSON.stringify({ lat: latitude, lng: longitude })
+      );
+      console.log("Location stored");
+    };
+    const errorCallback = (error) => {
+      console.error("Error getting location:", error.message);
+    };
+    const watchId = navigator.geolocation.watchPosition(
+      successCallback,
+      errorCallback,
+      options
+    );
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
+  }
+  function setUserLocation() {
+    if (localStorage.getItem("userLocation")) {
+      setUserLoc(JSON.parse(localStorage.getItem("userLocation")));
+    }
+  }
   useEffect(() => {
-    // getUserLocation();
-    intervalId(getUserLocation);
+    console.log(userLoc);
+  }, [userLoc]);
+
+  useEffect(() => {
+    getUserLocation();
+    watchUserLocation();
+    setUserLocation();
   }, []);
-  // GET LOCATION
 
   const options = {
     disableDefaultUI: true, // Disable default UI controls
@@ -149,7 +188,9 @@ const MainMap = () => {
           center={userLoc}
           zoom={15}
           options={options}
-        ></GoogleMap>
+        >
+          <Marker position={random} />
+        </GoogleMap>
       </LoadScript>
     </div>
   );
