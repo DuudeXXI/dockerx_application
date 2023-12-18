@@ -12,7 +12,7 @@
   background-color: white;
   border-radius: 24px 24px 0 0;
 
-  box-shadow: 0px -5px 30px 12px #00000028;
+  // box-shadow: 0px 0px 20px 6px rgba(0, 0, 0, 0.1);
   .buttons-container {
     display: flex;
     flex-flow: column nowrap;
@@ -23,8 +23,6 @@
     height: 100%;
     padding: 25px;
     gap: 10px;
-
-    // gap: 20px;
     button {
       letter-spacing: 1.2px;
       font-weight: 400;
@@ -45,17 +43,73 @@
       }
     }
     .reserve-btn {
-      border: 1px solid #9f9d9d;    
+      border: 1px solid #9f9d9d;
       background-color: white;
-    //   background-color: rgba(159, 157, 157, 0.25);
       color: black;
-      &:hover{
+      &:hover {
         border: none;
-          background-color: rgba(159, 157, 157, 0.5);
+        background-color: rgba(159, 157, 157, 0.5);
+      }
+      &:active {
+        background-color: rgba(34, 34, 34, 0.3);
+      }
+    }
+  }
+  .to-center-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -72px;
+    right: 25px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 2px 5px 0px rgb(0, 0, 0, 0.2);
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .nav-figure {
+    position: absolute;
+    height: 260px;
+    width: 100%;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: -1;
+    .figure-image {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 208px;
+      top: 0px;
+      left: 50%;
+      transform: translate(calc(-50%));
+      img {
+        width: 100%;
+      }
+      .bicycle-image {
+        margin: 0;
+        padding: 0;
+        left: 50%;
+        top: 12px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translate(calc(-50% + 6px));
+        border-radius: 50%;
+        img {
+          width: 100%;
         }
-        &:active{
-          background-color: rgba(34, 34, 34, 0.3);
-        }
+      }
     }
   }
 }
