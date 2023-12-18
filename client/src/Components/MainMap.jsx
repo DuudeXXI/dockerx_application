@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import "../Styles/MainMap.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { intervalId } from "../Functions/refreshInterval";
 
 import { useSelector, useDispatch } from "react-redux";
 import { updateLocation } from "../Reducers/MainMap";
+import { elementHeight } from "../Resources/elementHeight";
 
 const MainMap = () => {
   const currentLocation = useSelector((state) => state.currentLocation.value);
@@ -82,7 +82,9 @@ const random = {lat:54.70095243213106,lng:25.29821096642473}
   }, [userLoc]);
 
   useEffect(() => {
-    getUserLocation();
+    if(!localStorage.getItem("userLocation")){
+      getUserLocation();
+    }
     watchUserLocation();
     setUserLocation();
   }, []);
@@ -181,7 +183,7 @@ const random = {lat:54.70095243213106,lng:25.29821096642473}
   };
 
   return (
-    <div className="mainmap-container">
+    <div className="mainmap-container" style={{height:elementHeight.mapAndNav.map}}>
       <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerStyle={containerStyle}
