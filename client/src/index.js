@@ -7,7 +7,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 // reducer
-import currLocationReducer from "./Reducers/MainMap"
+import currLocationReducer from "./Reducers/currLocationReducer"
 
 const store = configureStore({
   reducer: {

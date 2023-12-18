@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialStateValue = {lat: 54.69178014444323,  lng: 25.2759951244431};
+const initialStateValue = null;
 
 export const currentLocationSlice = createSlice({
   name: "currentLocation",
@@ -13,5 +13,6 @@ export const currentLocationSlice = createSlice({
 });
 
 export const { updateLocation } = currentLocationSlice.actions;
+export const selectUserLocation = (state) => state.currentLocation.value;
 
 export default currentLocationSlice.reducer;
