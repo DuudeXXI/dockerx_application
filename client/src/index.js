@@ -11,7 +11,7 @@ import currLocationReducer from "./Reducers/currLocationReducer"
 
 const store = configureStore({
   reducer: {
-    currentLocation: currLocationReducer,
+    currentLocation: currLocationReducer
   },
 });
 
