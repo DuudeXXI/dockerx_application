@@ -1,4 +1,4 @@
 export const elementHeight = {
     mapOnly: {map:"100vh"},
-    mapAndNav:{map: "80vh", nav:"180px"},
+    mapAndNav:{map: "100vh", mapWData: "78vh", nav:"0px", navWData: "280px"},
 };

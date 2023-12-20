@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { Marker } from "@react-google-maps/api";
 import axios from "axios";
+// redux
+import { useDispatch } from "react-redux";
+import {
+  updateSelectedStation,
+} from "../../Reducers/selectedStationRecuder";
+// redux
 
 const StationMarkers = () => {
   const [stationList, setStationList] = useState(null);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     getData();
   }, []);
@@ -25,6 +31,9 @@ const StationMarkers = () => {
         console.error("Error fetching data:", error);
       });
   };
+  const handleMarkerClick = (station) => {
+    dispatch(updateSelectedStation(station))
+  }
 
   return stationList?.map((station) => (
     <Marker
@@ -34,11 +43,11 @@ const StationMarkers = () => {
         lng: station.dec_lng,
       }}
       label={station.controller_id.toString()}
+      onClick={() => handleMarkerClick(station)}
       // icon={{
       //   url: "path-to-your-marker-icon.png",
       //   scaledSize: new window.google.maps.Size(30, 30),
       // }}
-      // onClick={() => handleMarkerClick(controller_id)}
     />
   ));
 };

@@ -8,10 +8,12 @@ import { Provider } from "react-redux";
 
 // reducer
 import currLocationReducer from "./Reducers/currLocationReducer"
+import selectedStationRecuder from "./Reducers/selectedStationRecuder";
 
 const store = configureStore({
   reducer: {
-    currentLocation: currLocationReducer
+    currentLocation: currLocationReducer,
+    selectedStation: selectedStationRecuder,
   },
 });
 

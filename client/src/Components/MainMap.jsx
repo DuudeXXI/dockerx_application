@@ -9,6 +9,7 @@ import {
   selectUserLocation,
   updateLocation,
 } from "../Reducers/currLocationReducer";
+import { selectStation } from "../Reducers/selectedStationRecuder";
 // redux end
 import { elementHeight } from "../Resources/elementHeight";
 import { mapOptions, containerStyle } from "../Resources/googleOptions";
@@ -20,6 +21,7 @@ import {
 
 const MainMap = () => {
   const currentLocation = useSelector(selectUserLocation); //atvaizdavimui
+  const selectedStation = useSelector(selectStation);
   const dispatch = useDispatch(); //redagavimui - dispatch("verte i kuria bus keiciama");
 
   const [gooInstance, setGooInstance] = useState(null);
@@ -44,7 +46,11 @@ const MainMap = () => {
   return (
     <div
       className="mainmap-container"
-      style={{ height: elementHeight.mapAndNav.map }}
+      style={{
+        height: !selectedStation
+          ? elementHeight.mapAndNav.map
+          : elementHeight.mapAndNav.mapWData,
+      }}
     >
       <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
@@ -55,10 +61,14 @@ const MainMap = () => {
           onLoad={onMapLoad}
         >
           <Marker position={currentLocation || randCoords} />
-        <StationMarkers/>
+          <StationMarkers />
         </GoogleMap>
       </LoadScript>
-      <div className="to-center-btn" onClick={resetMapCenter}>
+      <div
+        className="to-center-btn"
+        data-station={Boolean(selectedStation)}
+        onClick={resetMapCenter}
+      >
         <img
           onClick={resetMapCenter}
           src={to_center_btn}

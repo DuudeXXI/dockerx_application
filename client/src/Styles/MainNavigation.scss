@@ -1,27 +1,32 @@
 @import "./Global.css";
 
 .nav-container {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
+  width: 100%;
   display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
   align-items: center;
   justify-content: flex-end;
-  height: 25vh;
-  width: 100%;
   background-color: white;
   border-radius: 24px 24px 0 0;
-
-  // box-shadow: 0px 0px 20px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  .line{
+    width: 80%;
+    height: 2px;
+    border-radius: 99px;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  .station-data-container{}
   .buttons-container {
     display: flex;
     flex-flow: column nowrap;
-    align-items: center;
     justify-content: center;
-    flex-basis: 100%;
-    width: 100%;
-    height: 100%;
-    padding: 25px;
+    width: 90%;
+    margin: 20px 5%;
     gap: 10px;
     button {
       letter-spacing: 1.2px;
@@ -55,42 +60,37 @@
       }
     }
   }
-  .nav-figure {
+  .figure-image {
     position: absolute;
-    height: 260px;
-    width: 100%;
-    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
     left: 50%;
-    transform: translate(-50%);
+    transform: translate(calc(-50%));
     z-index: -1;
-    .figure-image {
+    img {
+      width: 100%;
+    }
+    &[data-station=false]{
+      top: -80px;
+    }
+    &[data-station=true]{
+      top: -80px;
+    }
+    .bicycle-image {
       margin: 0;
       padding: 0;
+      left: 50%;
+      top: 12px;
       position: absolute;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 208px;
-      top: 0px;
-      left: 50%;
-      transform: translate(calc(-50%));
+      transform: translate(calc(-50% + 6px));
+      border-radius: 50%;
       img {
         width: 100%;
-      }
-      .bicycle-image {
-        margin: 0;
-        padding: 0;
-        left: 50%;
-        top: 12px;
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: translate(calc(-50% + 6px));
-        border-radius: 50%;
-        img {
-          width: 100%;
-        }
       }
     }
   }
