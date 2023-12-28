@@ -18,6 +18,7 @@ import {
   watchUserLocation,
   getUserLocation,
 } from "../Functions/mapData";
+import Profile from "./Profile";
 
 const MainMap = () => {
   const currentLocation = useSelector(selectUserLocation); //atvaizdavimui
@@ -75,6 +76,7 @@ const MainMap = () => {
           alt="to center navigation icon"
         />
       </div>
+      <Profile/>
     </div>
   );
 };
