@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-// const { v4: uuid } = require("uuid");
 const app = express();
 const bodyParser = require("body-parser");
 const port = 3000;
@@ -25,18 +24,45 @@ app.use(express.static("public"));
 const pool = require("./database/pool");
 
 io.on("connection", (socket) => {
-  console.log(`A user connected: ${socket.id} `);
+  console.log(`A user connected: ${socket.id}`);
+
+  socket.on("reserve", ({ controller_id, controller_status, lock_status, alarm_status }) => {
+    console.log(`Received reserve event: ${controller_id}`);
+
+    pool.getConnection((err, connection) => {
+      if (err) {
+        console.error("Error getting MySQL connection from pool:", err);
+        return;
+      }
+
+      const values = [lock_status, alarm_status, controller_status, controller_id];
+      const sql = "UPDATE controllers SET lock_status = ?, alarm_status = ?, controller_status = ? WHERE controller_id = ?";
+
+      connection.query(sql, values, (queryErr, results) => {
+        connection.release();
+
+        if (queryErr) {
+          console.error("Error updating database:", queryErr);
+          return;
+        }
+
+        console.log(`Database updated for controller_id ${controller_id}`);
+      });
+    });
+  });
 
   // Handle disconnection
   socket.on("disconnect", () => {
-    console.log(`A user disconnected: ${socket.id} `);
+    console.log(`A user disconnected: ${socket.id}`);
   });
+
   socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
   });
 });
 
 // console.log(err.code);  we will need to use it
+
 app.get("/", (req, res) => {
   const sql = `SELECT COUNT(*) AS count FROM controllers;
                SELECT * FROM controllers AS data_test;`;
@@ -131,7 +157,7 @@ app.put("/:id", (req, res) => {
   const { dec_lat, dec_lng, controller_status } = req.body;
   let values;
   let query;
-  
+
   if (dec_lat == null || dec_lng == null) {
     values = [controller_status, id];
     query =
@@ -195,8 +221,5 @@ app.post("/statusdata", (req, res) => {
 server.listen(port, () => {
   console.log("Socket.io and API services working...");
 });
-// app.listen(port, () => {
-//   console.log("API Service running...");
-// });
 
 //FUNCTIONS
