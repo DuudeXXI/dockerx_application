@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import "../Styles/MainMap.scss";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  Marker
+} from "@vis.gl/react-google-maps";
 import to_center_btn from "../Media/to_center_btn.svg";
 import StationMarkers from "./Markers/StationMarkers";
 //redux start
@@ -53,7 +58,25 @@ const MainMap = () => {
           : elementHeight.mapAndNav.mapWData,
       }}
     >
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+      <APIProvider
+        apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+      >
+        <Map
+          center={currentLocation || randCoords}
+          zoom={15}
+          options={mapOptions}
+          onLoad={onMapLoad}
+          mapContainerStyle={containerStyle}
+          // mapId={process.env.REACT_APP_GOOGLE_MAPS_MAP_ID}
+        >
+          {/* <AdvancedMarker
+            position={currentLocation || randCoords}
+          ></AdvancedMarker> */}
+          {/* <StationMarkers /> */}
+          {/* <Marker position={currentLocation || randCoords} /> */}
+        </Map>
+      </APIProvider>
+      {/* <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={currentLocation || randCoords}
@@ -64,7 +87,7 @@ const MainMap = () => {
           <Marker position={currentLocation || randCoords} />
           <StationMarkers />
         </GoogleMap>
-      </LoadScript>
+      </LoadScript> */}
       <div
         className="to-center-btn"
         data-station={Boolean(selectedStation)}
@@ -76,7 +99,7 @@ const MainMap = () => {
           alt="to center navigation icon"
         />
       </div>
-      <Profile/>
+      <Profile />
     </div>
   );
 };
