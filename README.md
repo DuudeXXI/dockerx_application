@@ -11,6 +11,7 @@ With this map based user navigation system, user is able to:
  - Find different types of bike storage system in town, select it reserve or lock storage of choice for a specific fee.
  - Application focused on daily commuters, but there is toogle function for Google Maps roads and labels to make map more informative for tourists.
  - For everyone by default map will list: bike stores, services, drinking fountains, for users to make it easier to navigate.
+ 
 This application is all in one go to for people who ride bikes and e-scooters. 
 
 ## Built With
