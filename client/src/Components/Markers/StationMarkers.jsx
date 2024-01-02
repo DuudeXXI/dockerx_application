@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
 import { Marker } from "@react-google-maps/api";
 import axios from "axios";
+import io from "socket.io-client";
 // redux
 import { useDispatch } from "react-redux";
-import {
-  updateSelectedStation,
-} from "../../Reducers/selectedStationRecuder";
+import { updateSelectedStation } from "../../Reducers/selectedStationRecuder";
 // redux
 
 const StationMarkers = () => {
+  const ip = "http://192.168.1.85";
+  const server_port = ":3000";
+
   const [stationList, setStationList] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
     getData();
+    socketChannels();
   }, []);
 
   const getData = () => {
@@ -25,15 +28,46 @@ const StationMarkers = () => {
           dec_lng: parseFloat(controller.dec_lng),
         }));
         setStationList(tempStorage);
-        console.log(tempStorage);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   };
+  // FUNCTIONS
+  const socketChannels = () => {
+    const socket = io.connect(ip + server_port);
+
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    });
+
+    socket.on("reserve", (data) => {
+      console.log("Received real-time update:", data);
+    });
+
+    socket.on("statusUpdateConfirmation", (data) => {
+      console.log("Received real-time update:", data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  };
+  const sendStatusChange = (data) => {
+    const socket = io.connect(ip + server_port);
+    console.log(data);
+    const controller_status = data.controller_status ? 0 : 1;
+    data = { ...data, controller_status };
+    const updatedList = stationList.map((station) =>
+      station.controller_id == data.controller_id ? data : station
+    );
+    setStationList(updatedList);
+    socket.emit("reserve", data);
+  };
   const handleMarkerClick = (station) => {
-    dispatch(updateSelectedStation(station))
-  }
+    dispatch(updateSelectedStation(station));
+    sendStatusChange(station);
+  };
 
   return stationList?.map((station) => (
     <Marker
@@ -44,10 +78,13 @@ const StationMarkers = () => {
       }}
       label={station.controller_id.toString()}
       onClick={() => handleMarkerClick(station)}
-      // icon={{
-      //   url: "path-to-your-marker-icon.png",
-      //   scaledSize: new window.google.maps.Size(30, 30),
-      // }}
+      icon={{
+        path: window.google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        fillColor: station.controller_status === 1 ? "#000000" : "#00ff00",
+        fillOpacity: 0.5,
+        strokeWeight: 0.3,
+        scale: 10,
+      }}
     />
   ));
 };

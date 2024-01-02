@@ -3,9 +3,11 @@ import { elementHeight } from "../Resources/elementHeight";
 import nav_figure from "../Media/nav_figure.svg";
 import nav_bicycle from "../Media/nav_bicycle.svg";
 import info_icon from "../Media/info_icon.svg"
+import LoginButton from "./LoginButton";
 // redux
 import { useSelector } from "react-redux";
 import { selectStation } from "../Reducers/selectedStationRecuder";
+import LogoutButton from "./LogoutButton";
 // redux
 const MainNavigation = () => {
   const station = useSelector(selectStation);
@@ -46,8 +48,10 @@ const MainNavigation = () => {
               </div>
           </div>
           <div className="buttons-container">
-            <button className="lock-btn">Lock</button>
-            <button className="reserve-btn">Reserve</button>
+            {/* <button className="lock-btn">Lock</button> */}
+            <LogoutButton/>
+            <LoginButton/>
+            {/* <button className="reserve-btn">Reserve</button> */}
           </div>
         </>
       ) : null}
