@@ -27,35 +27,20 @@
 
 <!-- ROADMAP -->
 ## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
+- [x] Map based navigation with Google Maps
+- [x] Find local bike stations in your area
+- [ ] list public places of user choice
+    - [ ] Google Maps labels and roads
+    - [ ] Custom places (bike stores, services, drinking fountains) from database
+- [ ] OAuth 2.0 user authentication system
+- [ ] Payment system with Stripe
+- [ ] Navigation choice of route system provider (Waze, Google Maps, Apple Maps)
+- [ ] Deploy API service to AWS BeanStalk
+- [ ] Setup mySQL database on AWS
+- [ ] Deploy front-end on AWS S3 Bucket
     - [ ] Nested Feature
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
+See the [open issues](https://github.com/DuudeXXI/dockerx_application/issues) for a full list of proposed features (and known issues).
 
 <!-- CONTACT -->
 ## Contact
