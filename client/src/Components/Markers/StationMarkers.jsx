@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Marker } from "@react-google-maps/api";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  Marker
+} from "@vis.gl/react-google-maps";
 import axios from "axios";
 import io from "socket.io-client";
 // redux
@@ -71,20 +76,12 @@ const StationMarkers = () => {
 
   return stationList?.map((station) => (
     <Marker
-      key={station.controller_id}
+      // key={station.controller_id}
       position={{
         lat: station.dec_lat,
         lng: station.dec_lng,
       }}
-      label={station.controller_id.toString()}
       onClick={() => handleMarkerClick(station)}
-      icon={{
-        path: window.google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        fillColor: station.controller_status === 1 ? "#000000" : "#00ff00",
-        fillOpacity: 0.5,
-        strokeWeight: 0.3,
-        scale: 10,
-      }}
     />
   ));
 };
