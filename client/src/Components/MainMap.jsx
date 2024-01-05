@@ -73,22 +73,10 @@ const MainMap = () => {
             position={currentLocation || randCoords}
           ></AdvancedMarker> */}
           {/* <StationMarkers /> */}
-          {/* <Marker position={currentLocation || randCoords} /> */}
+          <Marker position={currentLocation || randCoords} />
         </Map>
       </APIProvider>
-      {/* <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={currentLocation || randCoords}
-          zoom={15}
-          options={mapOptions}
-          onLoad={onMapLoad}
-        >
-          <Marker position={currentLocation || randCoords} />
-          <StationMarkers />
-        </GoogleMap>
-      </LoadScript> */}
-      <div
+      {/* <div
         className="to-center-btn"
         data-station={Boolean(selectedStation)}
         onClick={resetMapCenter}
@@ -99,7 +87,7 @@ const MainMap = () => {
           alt="to center navigation icon"
         />
       </div>
-      <Profile />
+      <Profile /> */}
     </div>
   );
 };
