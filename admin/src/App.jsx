@@ -3,9 +3,11 @@ import axios from "axios";
 import "./App.css";
 import io from "socket.io-client";
 import MainContext from "./contexts/MainContext";
-import Hero from "./Components/Hero";
 import ControllersList from "./Components/ControllersList";
 import EditModal from "./Components/EditModal";
+import Sidebar from "./Components/Sidebar";
+import DisplayContainer from "./Components/DisplayContainer";
+import Footer from "./Components/Footer";
 
 const App = () => {
   const [count, setCount] = useState("");
@@ -16,7 +18,6 @@ const App = () => {
   const [controllers, setControllers] = useState([]);
   const [socketData, setSocketData] = useState({});
   const [refresh, setRefresh] = useState(false);
-
   // controllers update modal states
   const [controllerUpdate, setControllerUpdate] = useState({});
   const [isValidLatUpdate, setIsValidLatUpdate] = useState(true);
@@ -92,21 +93,9 @@ const App = () => {
       }}
     >
       <div className="main-container">
-        <div className="row">
-          <Hero />
-          <ControllersList />
-          <EditModal />
-          <div className="row">
-            <div className="admin_interface">
-              <div className="admin_switch "> I/O mygtukas</div>
-              <div className="admin_btn_list">
-                <div className="admin_btn">Create database</div>
-                <div className="admin_btn">Insert controller</div>
-                <div className="admin_btn">Delete selected controller</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Sidebar/>
+        <DisplayContainer/>
+        <Footer/>
       </div>
     </MainContext.Provider>
   );
