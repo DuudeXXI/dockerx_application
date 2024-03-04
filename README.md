@@ -24,8 +24,9 @@ This application is all in one go to for people who ride bikes and e-scooters.
 ![cloud](https://skillicons.dev/icons?i=mysql,&perline=3) <br>
 
 <!-- HOW TO USE LOCALLY -->
+## How to Setup
  - Setup Mysql Workbench, setup Mysql server
- - ##### If you want to add docking station:
+ - If you want to add docking station:
  -  cd admin & npm i & update local ip address & server port in App.jsx 25/26 lines. & npm start
  -  Setu server:
  -   cd .. & cd server & npm i & npm run dev
