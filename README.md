@@ -23,6 +23,15 @@ This application is all in one go to for people who ride bikes and e-scooters.
 #### Database
 ![cloud](https://skillicons.dev/icons?i=mysql,&perline=3) <br>
 
+<!-- HOW TO USE LOCALLY -->
+ - Setup Mysql Workbench, setup Mysql server
+ - ##### If you want to add docking station:
+ -  cd admin & npm i & update local ip address & server port in App.jsx 25/26 lines. & npm start
+ -  Setu server:
+ -   cd .. & cd server & npm i & npm run dev
+ -    Insert your database server info to according fields inside server/database/pool.js
+ -    ... Further structure will be updated ...
+
 <!-- ROADMAP -->
 ## Roadmap
 - [x] Map based navigation with Google Maps
