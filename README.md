@@ -28,7 +28,7 @@ This application is all in one go to for people who ride bikes and e-scooters.
  - Setup Mysql Workbench, setup Mysql server
  - If you want to add docking station:
  -  cd admin & npm i & update local ip address & server port in App.jsx 25/26 lines. & npm start
- -  Setu server:
+ -  Setup server:
  -   cd .. & cd server & npm i & npm run dev
  -    Insert your database server info to according fields inside server/database/pool.js
  -    ... Further structure will be updated ...
