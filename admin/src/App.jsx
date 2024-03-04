@@ -22,8 +22,8 @@ const App = () => {
   const [isValidLatUpdate, setIsValidLatUpdate] = useState(true);
   const [isValidLngUpdate, setIsValidLngUpdate] = useState(true);
   let tempStorage = controllers;
-  const ip = "http://192.168.1.85";
-  const server_port = ":3000";
+  const ip = "http://192.168.33.41";
+  const server_port = ":3002";
   // FUNCTIONS
   const socketChannels = () => {
     const socket = io.connect(ip + server_port);
