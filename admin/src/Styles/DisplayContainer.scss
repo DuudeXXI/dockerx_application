@@ -3,4 +3,10 @@
     width: 100%;
     grid-row: 1 / span 2;
     background-color: rgb(225, 225, 225);
+    .center-section{
+        padding: 50rem 75rem;
+        display: flex;
+        flex-flow: column nowrap;
+        
+    }
 }

@@ -48,16 +48,15 @@ const Hero = () => {
   };
 
   return (
-    <div className="wrapper">
+    <div className="hero">
+      <div className="hero-text-wrap">
       <h2>DockerX</h2>
-      <p>
-        Take it easy. We will take care of your ride <br />
-        Already counting: <br />
-        <b>{count.toString().length <= 0 ? "Nėra" : count}</b>
-        <br /> Stations!
-      </p>
+      <p>Add Station to a Lattitude/Longitude location</p>
+      </div>
       <div className="form-container">
         <div className="form">
+          <div className="input-wrap">
+          <div className="text-field-wrap">
           <input
             className="text-field"
             placeholder="latitude"
@@ -67,15 +66,19 @@ const Hero = () => {
           {!isValidLat && (
             <p style={{ color: "red" }}>Use correct format: 00.000...</p>
           )}
-          <input
+          </div>
+            <div className="text-field-wrap">
+            <input
             className="text-field"
             placeholder="longitude"
             value={dec_lng}
             onChange={handleInputLng}
           />
+          </div>
           {!isValidLng && (
             <p style={{ color: "red" }}>Use correct format: 00.000...</p>
           )}
+            </div>
           <button onClick={sendPost}>Add controller</button>
         </div>
       </div>
