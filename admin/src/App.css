@@ -1,7 +1,16 @@
 /* Main */
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+:root{
+  --h1:48rem;
+  --h2:38rem;
+  --h3:32rem;
+  --t-primary:18rem;
+  --t-secondary: 16rem;
+  --radius-container: 18rem;
+}
 
 * {
+
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -55,7 +64,7 @@ html.stopped{
 h1, h2, h3, h4, h5, h6{
   font-feature-settings: 'salt' on;
 }
-p, td, tr, tbody, span, div{font-size: 16rem;}
+p, td, tr, tbody, span, div{font-size: var(--t-primary);}
 
 a{
 	color: inherit;
@@ -72,8 +81,8 @@ a{
   min-height: 100vh;
 }
 .hero {
-  background-image: linear-gradient(25deg, #77A1D3 0%, #79CBCA  71%, #77A1D3  100%);
-  border-radius: 24rem;
+  background-image: linear-gradient(25deg, #628bbe 10%, #79CBCA  71%, #77A1D3  100%);
+  border-radius: var(--radius-container);
   display: flex;
   height: 200rem;
   width: 100%;
@@ -85,20 +94,19 @@ a{
 
 .hero > .hero-text-wrap > h2 {
   color: rgb(255, 255, 255);
-  font-size: 48rem;
+  font-size: var(--h1)
 }
 
 .hero > .hero-text-wrap > p {
-  text-align: center;
-  font-size: 24rem;
+  text-align: left;
+  font-size: var(--t-primary);
   font-weight: 500;
   color: rgb(255, 255, 255);
-  padding-bottom: 20rem;
 }
 
 .form-container {
-height: 50%;
-padding: 25rem 25rem;
+height: 110rem;
+padding: 25rem 30rem;
 }
 
 .form-container > .form {
@@ -112,7 +120,9 @@ padding: 25rem 25rem;
   padding: 0rem 10rem 0 0;
   gap: 5rem;
 }
-
+.form-container > .form > .input-wrap> .text-field-wrap{
+  height: 100%;
+}
 .form-container > .form > .input-wrap> .text-field-wrap > .text-field {
   padding: 10rem 20rem;
   width: 100%;
@@ -123,48 +133,42 @@ padding: 25rem 25rem;
 
 .form-container > .form > button {
   align-self: center;
-  margin-top: 5rem;
   width: 200rem;
   border: none;
   min-height: 100%;
   border-radius: 8rem;
-  font-size: 14rem;
+  font-size: var(--t-primary);
   text-align: center;
   text-transform: uppercase;
-  color: white;            
-  transition: 1s;
-  background-size: 200% auto;
-  background-image: linear-gradient(to right, #554431 0%, #da8f26  51%, #554331  100%);
+  color: rgba(0, 0, 0, 0.7);            
+  transition: 0.5s;
+  background-size: 300% auto;
+  background-image: linear-gradient(15deg, #ffffff00 0%, #ffffff  71%, #ffffff00  100%);
 }
 
 .form-container > .form > button:hover {
-  background-position: right center; /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
+  background-position: right center;
+  color: rgba(0, 0, 0, 0.9);  
 }
 
 
 /* Main End*/
 /* Controllers list */
+.controllers-list-component{
+  color: #ffffff;
+  border-radius: var(--radius-container);
+  border: 1rem solid rgba(0, 0, 0, 0.1);
+  padding: 20rem 10rem;
+}
 
 .controllers-list {
   width: 100%;
-  margin-top: 60rem;
   border: 1rem solid rgba(128, 128, 128, 0.5);
   display: flex;
   overflow: hidden;
   flex-flow: column nowrap;
 }
 
-tr:nth-child(even) {
-  background: #ffffff;
-  box-shadow: 0 5rem 35rem rgba(0, 0, 0, 0.1);
-}
-
-tr:nth-child(odd) {
-  background: #ffffff;
-  box-shadow: 0 5rem 35rem rgba(0, 0, 0, 0.1);
-}
 .controllers-list{
   border: none;
 }
@@ -173,33 +177,54 @@ tr:nth-child(odd) {
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
-  padding: 10rem 0;
+  padding: 5rem 0;
   color: white;
 }
 .controllers-list > tbody > tr > td {
-  color: black;
+  color: rgba(0, 0, 0, 0.8);
 }
 
+
 .controllers-list > tbody > .head {
-  font-weight: 600;
+  font-weight: 500;
+  background-color: none;
   border-radius: 6rem 6rem 0 0 ;
-  background: rgb(255, 225, 116)
+}
+.controllers-list > tbody > .head > td{
+  background-color: hsla(179, 44%, 64%, 0.2);
+  padding: 15rem;
+  margin: 0 5rem;
+  border-radius: 12rem;
 }
 
 .controllers-list > tbody > .controller-line > .controller-cell {
   display: flex;
-
   align-items: center;
   justify-content: center;
-  width: 100rem;
+  width: 100%;
 }
 
 .controllers-list > tbody > .controller-line > .controller-cell button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20rem;
-  height: 20rem;
+  border: 1rem solid rgba(0, 0, 0, 0.1);
+  font-size: var(--t-primary);
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  border-radius: 4rem;
+  transition: all 0.2s;
+  width: 100%;
+  margin: 0 10rem;
+  height: 35rem;
+  cursor: pointer;
+}
+.controllers-list > tbody > .controller-line > .controller-cell button:hover {
+  background-color: rgba(0, 0, 0, 0.025);
+  border: 1rem solid rgb(79, 114, 255, 0.5);
+  color: rgb(79, 114, 255);
+  box-shadow: inset 0px 0px 2px 0px rgb(79, 114, 255, 0.5);
+  
 }
 
 /* Controllers list End*/
@@ -215,14 +240,21 @@ tr:nth-child(odd) {
 }
 
 .page-nav-container button {
-  cursor: pointer;
+  border: 1rem solid rgba(0, 0, 0, 0.1);
   padding: 8rem 16rem;
-  background-color: var(--button-color-main);
   border-radius: 8rem;
-  border: none;
-  color: white;
-  font-size: 14rem;
-  background-image: linear-gradient(45deg, #a66924 0%, #da8f26  70%);
+  font-size: var(--t-primary);
+  background-color: transparent;
+  transition: all 0.2s;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+.page-nav-container button:hover{
+  border: 1rem solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  border: 1rem solid rgb(79, 114, 255, 0.5);
+  color: rgb(79, 114, 255);
+  box-shadow: inset 0px 0px 2px 0px rgb(79, 114, 255, 0.5);
 }
 
 /* Controllers Display End */
@@ -249,7 +281,7 @@ tr:nth-child(odd) {
   width: 100%;
   display: flex;
   justify-content: center;
-  font-size: 26rem;
+  font-size: var(--h3);
 }
 
 .update-container > .container-column > input {
@@ -263,7 +295,7 @@ tr:nth-child(odd) {
   width: 100%;
   display: flex;
   justify-content: center;
-  font-size: 26rem;
+  font-size: var(--h3)
 }
 
 .update-container > .container-column > button {
@@ -273,7 +305,7 @@ tr:nth-child(odd) {
   width: 100%;
   border: none;
   border-radius: 12rem;
-  font-size: 14rem;
+  font-size: var(--t-primary)
 }
 .update-container > .container-column > .exit-modal {
   position: absolute;
@@ -289,34 +321,71 @@ tr:nth-child(odd) {
   background-color: rgba(128, 128, 128, 0.4);
 }
 @media only screen and (max-width: 991px) {
+  :root{
+    --h1:42rem;
+    --h2:32rem;
+    --h3:32rem;
+    --t-primary:12rem;
+    --t-secondary: 10rem;
+  }
+  .form-container {
+    height: 90rem;
+    padding: 25rem 20rem;
+    }
+
+  .hero {
+    background-image: linear-gradient(25deg, #628bbe 10%, #79CBCA  71%, #77A1D3  100%);
+    border-radius: var(--radius-container);
+    display: flex;
+    height: 200rem;
+    width: 100%;
+    padding: 0 0 0 25rem;
+    justify-content: center;
+    flex-flow: column nowrap;
+  }
+  .controllers-list > tbody > .controller-line > .controller-cell button {
+    border-radius: 4rem;
+    transition: all 0.2s;
+    width: 100%;
+    height: 25rem;
+    cursor: pointer;
+  }
+  .controllers-list > tbody > .head > td{
+    background-color: hsla(179, 44%, 64%, 0.2);
+    padding: 7rem 5rem;
+    margin: 0 2rem;
+    border-radius: 6rem;
+  }
   .row {
     width: 100%;
   }
-  p, td, tr, tbody, span{font-size: 14rem;}
-  .wrapper > p {
-    font-size: 16rem;
+  .hero-text-wrap > h2 {
+    text-align: center;
+  }
+  .form-container > .form > .text-field {
+    padding: 7rem 16rem;
+    width: 100%;
+    border-radius: 8rem;
+    border: 1rem solid rgb(213, 213, 213);
+  }
+.main-container {
+  grid-template-columns: 100rem auto;
 }
-.wrapper > h2 {
-  font-size: 42rem;
-  padding-bottom: 20rem;
-}
-.form-container > .form > .text-field {
-  padding: 7rem 16rem;
-  width: 100%;
+.page-nav-container button {
+  padding: 6rem 12rem;
   border-radius: 8rem;
-  border: 1rem solid rgb(213, 213, 213);
 }
-
 }
 @media only screen and (max-width: 767px) {
+  .main-container {
+    grid-template-columns: 100%;
+  }
   .row {
     width: 100%;
   }
-  p, td, tr, tbody, span{font-size: 12rem;}
 }
 @media only screen and (max-width: 477px) {
   .row {
     width: 100%;
   }
-  p, td, tr, tbody, span{font-size: 10rem;}
 }

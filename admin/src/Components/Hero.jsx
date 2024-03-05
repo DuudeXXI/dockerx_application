@@ -74,10 +74,10 @@ const Hero = () => {
             value={dec_lng}
             onChange={handleInputLng}
           />
-          </div>
           {!isValidLng && (
             <p style={{ color: "red" }}>Use correct format: 00.000...</p>
           )}
+          </div>
             </div>
           <button onClick={sendPost}>Add controller</button>
         </div>

@@ -17,7 +17,7 @@ const ControllersList = () => {
   );
 
   return (
-    <div className="row">
+    <div className="controllers-list-component">
       <table className="controllers-list">
         <tbody>
           <tr className="controller-line head">
